@@ -18,6 +18,16 @@ def _verify(data: bytes, key: str) -> bool:
     return original_hash == check_hash
 
 
+def _sign_obj(obj: Any, key: str) -> bytes:
+    obj_pickle = pickle.dumps(obj)
+    obj_hash = hashlib.sha256(obj_pickle).hexdigest()
+
+    key_sum = (key + obj_hash).encode()
+    check_hash = hashlib.sha256(key_sum)
+    result = check_hash + obj_pickle
+    return result
+
+
 def load(file: io.BufferedReader, key: str) -> Any:
     data = file.read()
     file.close()
@@ -31,12 +41,6 @@ def load(file: io.BufferedReader, key: str) -> Any:
 
 
 def dump(obj: Any, file: io.BufferedWriter, key: str) -> None:
-    obj_pickle = pickle.dumps(obj)
-    obj_hash = hashlib.sha256(obj_pickle).hexdigest()
-
-    key_sum = (key + obj_hash).encode()
-    check_hash = hashlib.sha256(key_sum)
-    result = check_hash + obj_pickle
-
-    file.write(result)
+    signed_obj = _sign_obj(obj, key)
+    file.write(signed_obj)
     file.close()
