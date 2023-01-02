@@ -43,12 +43,7 @@ def load(file: io.BufferedReader, key: str) -> Any:
     with file as _file:
         data = _file.read()
 
-        if _verify(data, key):
-            obj = data[64:]
-            unpickle_obj = pickle.loads(obj)
-            return unpickle_obj
-        else:
-            raise exceptions.IntegrityUnconfirmedError('Unable to confirm file integrity')
+    return loads(data, key)
 
 
 def dump(obj: Any, file: io.BufferedWriter, key: str) -> None:
