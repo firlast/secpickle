@@ -31,3 +31,12 @@ with open('data', 'rb') as file:
 
 print(result)
 ```
+
+# License
+
+```
+BSD 3-Clause License
+Copyright (c) 2023, Firlast
+```
+
+This project uses the [BSD 3-Clause License](https://github.com/firlast/secpickle/blob/master/LICENSE), please read the license for more informations.
