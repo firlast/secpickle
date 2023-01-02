@@ -13,7 +13,8 @@ def _verify(data: bytes, key: str) -> bool:
 
     obj_hash = hashlib.sha256(obj).hexdigest()
     key_sum = (key + obj_hash).encode()
-    check_hash = hashlib.sha256(key_sum)
+    check_hash = hashlib.sha256(key_sum).hexdigest()
+    check_hash = check_hash.encode()
 
     return original_hash == check_hash
 
@@ -23,7 +24,8 @@ def _sign_obj(obj: Any, key: str) -> bytes:
     obj_hash = hashlib.sha256(obj_pickle).hexdigest()
 
     key_sum = (key + obj_hash).encode()
-    check_hash = hashlib.sha256(key_sum)
+    check_hash = hashlib.sha256(key_sum).hexdigest()
+    check_hash = check_hash.encode()
     result = check_hash + obj_pickle
     return result
 
