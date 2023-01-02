@@ -28,3 +28,15 @@ def load(file: io.BufferedReader, key: str) -> Any:
         return unpickle_obj
     else:
         raise exceptions.IntegrityUnconfirmedError('Unable to confirm file integrity')
+
+
+def dump(obj: Any, file: io.BufferedWriter, key: str) -> None:
+    obj_pickle = pickle.dumps(obj)
+    obj_hash = hashlib.sha256(obj_pickle).hexdigest()
+
+    key_sum = (key + obj_hash).encode()
+    check_hash = hashlib.sha256(key_sum)
+    result = check_hash + obj_pickle
+
+    file.write(result)
+    file.close()
