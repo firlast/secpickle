@@ -20,6 +20,7 @@ def _verify(data: bytes, key: str) -> bool:
 
 def load(file: io.BufferedReader, key: str) -> Any:
     data = file.read()
+    file.close()
 
     if _verify(data, key):
         obj = data[64:]
