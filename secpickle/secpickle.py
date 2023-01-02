@@ -46,6 +46,11 @@ def load(file: io.BufferedReader, key: str) -> Any:
     return loads(data, key)
 
 
+def dumps(data: bytes, key: str) -> bytes:
+    signed_obj = _sign_obj(data, key)
+    return signed_obj
+
+
 def dump(obj: Any, file: io.BufferedWriter, key: str) -> None:
     with file as _file:
         signed_obj = _sign_obj(obj, key)
