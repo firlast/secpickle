@@ -30,6 +30,15 @@ def _sign_obj(obj: Any, key: str) -> bytes:
     return result
 
 
+def loads(data: bytes, key: str) -> Any:
+    if _verify(data, key):
+        obj = data[64:]
+        unpickle_obj = pickle.loads(obj)
+        return unpickle_obj
+    else:
+        raise exceptions.IntegrityUnconfirmedError('Unable to confirm file integrity')
+
+
 def load(file: io.BufferedReader, key: str) -> Any:
     with file as _file:
         data = _file.read()
@@ -40,15 +49,6 @@ def load(file: io.BufferedReader, key: str) -> Any:
             return unpickle_obj
         else:
             raise exceptions.IntegrityUnconfirmedError('Unable to confirm file integrity')
-
-
-def load(data: bytes, key: str) -> Any:
-    if _verify(data, key):
-        obj = data[64:]
-        unpickle_obj = pickle.loads(obj)
-        return unpickle_obj
-    else:
-        raise exceptions.IntegrityUnconfirmedError('Unable to confirm file integrity')
 
 
 def dump(obj: Any, file: io.BufferedWriter, key: str) -> None:
